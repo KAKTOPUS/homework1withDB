@@ -1,5 +1,5 @@
 package data;
 
 public enum ListOfChange {
-    ALL, NAME, AGE, WEIGHT, COLOR, TYPE
+    NAME, AGE, WEIGHT, COLOR, TYPE, ALL
 }

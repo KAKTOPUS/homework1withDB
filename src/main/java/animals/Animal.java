@@ -10,6 +10,15 @@ public abstract class Animal {
     private String color = " ";
     private int id = 0;
 
+    protected Animal(String name, int age, int weight, String color, AnimalTypeData data) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.weight = weight;
+        this.color = color;
+        this.data = data;
+    }
+
     protected Animal(int id, String name, int age, int weight, String color, AnimalTypeData data) {
         this.id = id;
         this.name = name;
