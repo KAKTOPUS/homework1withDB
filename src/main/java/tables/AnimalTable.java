@@ -15,7 +15,6 @@ import tools.AcceptableNumber;
 import tools.AcceptableType;
 
 public class AnimalTable extends AbsTable {
-    private MySqlConnectorDb mySqlConnectorDb = new MySqlConnectorDb();
     private AcceptableNumber aNum = new AcceptableNumber();
     private AcceptableName aName = new AcceptableName();
     private AcceptableType aType = new AcceptableType();

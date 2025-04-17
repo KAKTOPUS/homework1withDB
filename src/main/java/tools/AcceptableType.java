@@ -17,8 +17,8 @@ public class AcceptableType {
         }
 
     private boolean acceptableType(String str) {
-        for(AnimalTypeData animalTypeData : AnimalTypeData.values()) {
-            if(str.equals(animalTypeData.name())) {
+        for (AnimalTypeData animalTypeData : AnimalTypeData.values()) {
+            if (str.equals(animalTypeData.name())) {
                 return true;
             }
         }
@@ -26,7 +26,7 @@ public class AcceptableType {
     }
 
     public AnimalTypeData setType(String str) {
-        if(acceptableType(str)) {
+        if (acceptableType(str)) {
             return AnimalTypeData.valueOf(str);
         }
         return null;
