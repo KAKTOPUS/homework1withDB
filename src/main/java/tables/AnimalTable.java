@@ -1,14 +1,9 @@
 package tables;
-
-
 import animals.Animal;
 import data.AnimalTypeData;
-import data.GetterList;
 import data.ListOfChange;
 import db.IDataBase;
 import db.MySqlConnectorDb;
-
-
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,11 +12,13 @@ import java.util.List;
 import java.util.Scanner;
 import tools.AcceptableName;
 import tools.AcceptableNumber;
+import tools.AcceptableType;
 
 public class AnimalTable extends AbsTable {
     private MySqlConnectorDb mySqlConnectorDb = new MySqlConnectorDb();
     private AcceptableNumber aNum = new AcceptableNumber();
     private AcceptableName aName = new AcceptableName();
+    private AcceptableType aType = new AcceptableType();
     private static Scanner scanner = new Scanner(System.in);
 
 
@@ -100,12 +97,12 @@ public class AnimalTable extends AbsTable {
     }
 
     public boolean updateAll(int id, String newName, int newAge, int newWeight, String newColor, AnimalTypeData data) throws SQLException, IOException {
-        String sqlRequest = String.format("UPDATE %s SET (" +
+        String sqlRequest = String.format("UPDATE %s SET " +
                 "name = '%s'," +
                 " age = %d, " +
                 " weight = %d," +
                 " color = '%s', " +
-                " type = '%s') WHERE id = %d", name, newName, newAge, newWeight, newColor, data, id);
+                " type = '%s' WHERE id = %d", name, newName, newAge, newWeight, newColor, data, id);
         int rows = iDataBase.executeUpdate(sqlRequest);
         return rows > 0;
     }
@@ -121,11 +118,12 @@ public class AnimalTable extends AbsTable {
     private boolean findAnimalById(int id) throws SQLException, IOException {
         String sqlRequest = String.format("SELECT * FROM %s WHERE id = %d", name, id);
         ResultSet resultSet = iDataBase.resultExecuteWithReturn(sqlRequest);
-        if(listValuesFromTable(resultSet)!=null) {
-            return true;
+        if(listValuesFromTable(resultSet).isEmpty()) {
+            return false;
         }
-        return false;
+        return true;
     }
+
 
     public void update() throws SQLException, IOException {
         System.out.println("Введите id животного, которое хотите изменить: ");
@@ -141,22 +139,10 @@ public class AnimalTable extends AbsTable {
         }
 
 
-        String inputId = scanner.next().trim();
-        while (!inputId.matches("\\d{1,2}$")) {
-            System.out.println(String.format("%s недопустимое число, либо же %s не является числом, попробуйте снова", inputId, inputId));
-            inputId = scanner.next().trim();
-        }
+        String inputId = "";
+        inputId = aNum.checkNum(inputId, scanner);
         int strId = Integer.parseInt(inputId);
-        while (!aNum.isAcceptableNumbers(strId)) {
-            System.out.println(String.format("%s недопустимое число, либо же %s не является числом, попробуйте снова", inputId, inputId));
-            inputId = scanner.next().trim();
-            strId = Integer.parseInt(inputId);
-        }
-        while (strId==0||strId>=100) {
-            System.out.println(String.format("%s недопустимое число, либо же %s не является числом, попробуйте снова", inputId, inputId));
-            inputId = scanner.next().trim();
-            strId = Integer.parseInt(inputId);
-        }
+
         while (!findAnimalById(strId)) {
             System.out.println(String.format("%s недопустимое число, либо же %s не является числом, попробуйте снова", inputId, inputId));
             inputId = scanner.next().trim();
@@ -169,7 +155,7 @@ public class AnimalTable extends AbsTable {
                 listOfChange.add(list.name());
             }
 
-            System.out.println(String.format("Введите то, что хотите поменять: %s", String.join("/", listOfChange)));
+            System.out.println(String.format("Введите то, что хотите поменять: %s" + " или введите 'BACK' для выхода в предыдущее меню", String.join("/", listOfChange)));
 
             String userCommand = scanner.next().trim();
             String userCommandUpperCase = userCommand.toUpperCase();
@@ -190,31 +176,137 @@ public class AnimalTable extends AbsTable {
 
             switch (ListOfChange.valueOf(userCommandUpperCase)) {
 
+                case NAME: {
+                    System.out.println("Введите новое имя: ");
+
+                    String nameStr = "";
+                    nameStr = aName.checkName(nameStr, scanner);
+
+                    if (!updateName(strId, nameStr)) {
+                        System.out.println(String.format("Животное с id '%d' не удалось обновить!", strId));
+                        return;
+                    }
+
+                    updateName(strId, nameStr);
+                    System.out.println(String.format("Животное с id '%d' успешно обновлено!", strId));
+                    break;
+                }
                 case AGE: {
                     System.out.println("Введите новый возраст: ");
 
-                    String ageStr = scanner.next().trim();
-                    while (!ageStr.matches("\\d{1,2}$")) {
-                        System.out.println(String.format("%s недопустимое число, либо же %s не является числом, попробуйте снова", ageStr, ageStr));
-                        ageStr = scanner.next().trim();
-                    }
+                    String ageStr = "";
+                    ageStr = aNum.checkNum(ageStr, scanner);
                     int age = Integer.parseInt(ageStr);
-                    while (!aNum.isAcceptableNumbers(age)) {
-                        System.out.println(String.format("%s недопустимое число, либо же %s не является числом, попробуйте снова", age, age));
-                        ageStr = scanner.next().trim();
-                        age = Integer.parseInt(ageStr);
-                    }
-                    while (age==0||age>=100) {
-                        System.out.println(String.format("%s недопустимое число, либо же %s не является числом, попробуйте снова", age, age));
-                        ageStr = scanner.next().trim();
-                        age = Integer.parseInt(ageStr);
-                    }
 
                     if (!updateAge(strId, age)) {
                         System.out.println(String.format("Животное с id '%d' не удалось обновить!", strId));
+                        return;
                     }
 
                     updateAge(strId, age);
+                    System.out.println(String.format("Животное с id '%d' успешно обновлено!", strId));
+                    break;
+                }
+                case WEIGHT: {
+                    System.out.println("Введите новый вес: ");
+
+                    String weightStr = "";
+                    weightStr = aNum.checkNum(weightStr, scanner);
+                    int weight = Integer.parseInt(weightStr);
+
+                    if(!updateWeight(strId, weight)) {
+                        System.out.println(String.format("Животное с id '%d' не удалось обновить!", strId));
+                        return;
+                    }
+
+                    updateWeight(strId, weight);
+                    System.out.println(String.format("Животное с id '%d' успешно обновлено!", strId));
+                    break;
+                }
+                case COLOR: {
+                    System.out.println("Введите новый цвет: ");
+
+                    String colorStr = "";
+                    colorStr = aName.checkName(colorStr, scanner);
+
+                    if(!updateColor(strId, colorStr)) {
+                        System.out.println(String.format("Животное с id '%d' не удалось обновить!", strId));
+                        return;
+                    }
+
+                    updateColor(strId, colorStr);
+                    System.out.println(String.format("Животное с id '%d' успешно обновлено!", strId));
+                    break;
+                }
+                case TYPE: {
+
+                    List<String> listA = new ArrayList<>();
+                    for (AnimalTypeData animalTypeData : AnimalTypeData.values()) {
+                        listA.add(animalTypeData.name());
+                    }
+                    System.out.println(String.format("Введите животное из списка: %s", String.join("/", listA)));
+                    String animalType = scanner.next().trim().toUpperCase();
+
+                    while (!aType.isAcceptableType(animalType)) {
+                        System.out.println(String.format("%s нету в списке, попробуйте снова", animalType));
+                        animalType = scanner.next().trim().toUpperCase();
+                    }
+
+                    AnimalTypeData animalTypeData = aType.setType(animalType);
+
+                    if(!updateType(strId, animalTypeData)) {
+                        System.out.println(String.format("Животное с id '%d' не удалось обновить!", strId));
+                        return;
+                    }
+
+                    updateType(strId, animalTypeData);
+                    System.out.println(String.format("Животное с id '%d' успешно обновлено!", strId));
+                    break;
+                }
+                case ALL: {
+                    System.out.println("Введите новое имя: ");
+                    String nameStr = "";
+                    nameStr = aName.checkName(nameStr, scanner);
+
+                    System.out.println("Введите новый возраст: ");
+                    String ageStr = "";
+                    ageStr = aNum.checkNum(ageStr, scanner);
+                    int age = Integer.parseInt(ageStr);
+
+                    System.out.println("Введите новый вес: ");
+                    String weightStr = "";
+                    weightStr = aNum.checkNum(weightStr, scanner);
+                    int weight = Integer.parseInt(weightStr);
+
+                    System.out.println("Введите новый цвет: ");
+                    String colorStr = "";
+                    colorStr = aName.checkName(colorStr, scanner);
+
+                    List<String> listA = new ArrayList<>();
+                    for (AnimalTypeData animalTypeData : AnimalTypeData.values()) {
+                        listA.add(animalTypeData.name());
+                    }
+                    System.out.println(String.format("Введите животное из списка: %s", String.join("/", listA)));
+                    String animalType = scanner.next().trim().toUpperCase();
+
+                    while (!aType.isAcceptableType(animalType)) {
+                        System.out.println(String.format("%s нету в списке, попробуйте снова", animalType));
+                        animalType = scanner.next().trim().toUpperCase();
+                    }
+
+                    AnimalTypeData animalTypeData = aType.setType(animalType);
+
+                    if(!updateAll(strId, nameStr, age, weight, colorStr, animalTypeData)) {
+                        System.out.println(String.format("Животное с id '%d' не удалось обновить!", strId));
+                        return;
+                    }
+
+                    updateAll(strId, nameStr, age, weight, colorStr, animalTypeData);
+                    System.out.println(String.format("Животное с id '%d' успешно обновлено!", strId));
+                    break;
+                }
+                case BACK: {
+                    return;
                 }
             }
         }

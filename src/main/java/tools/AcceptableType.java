@@ -1,8 +1,6 @@
 package tools;
 import data.AnimalTypeData;
 
-import java.util.ArrayList;
-
 public class AcceptableType {
 
     public boolean isAcceptableType(String str) {

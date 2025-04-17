@@ -11,18 +11,15 @@ import java.util.Map;
 import properties.FilePropertiesReader;
 
 public class MySqlConnectorDb implements IDataBase {
-    private static String url ="jdbc:mysql://sql.home.kartushin.su:3306/kaktopus";
-    private static String user ="admin";
-    private static String password ="711267";
-
     private static Connection connection = null;
     private static Statement statement = null;
 
     private void openConnectToDb() throws SQLException, IOException {
 
         if (connection == null) {
-         //   Map<String, String> settings = new FilePropertiesReader().getSettings();
-            connection = DriverManager.getConnection(url, user, password);
+         //   connection = DriverManager.getConnection(url, user, password);
+            Map<String, String> settings = new FilePropertiesReader().getSettings();
+            connection = DriverManager.getConnection(settings.get("url"), settings.get("login"), settings.get("password"));
         }
 
         if (statement == null) {

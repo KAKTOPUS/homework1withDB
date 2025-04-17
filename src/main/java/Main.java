@@ -3,8 +3,6 @@ import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
-
-import animals.Animal;
 import data.*;
 import tools.*;
 import tables.AnimalTable;

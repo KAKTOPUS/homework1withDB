@@ -1,15 +1,14 @@
 package tools;
-
 import animals.Animal;
 import data.AnimalTypeData;
 import data.GetterList;
 import tables.AnimalTable;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 public class ListAnimalFromTable {
     private static AnimalTable animalTable = new AnimalTable();
     private static Scanner scanner = new Scanner(System.in);
@@ -21,7 +20,7 @@ public class ListAnimalFromTable {
         }
 
         while (true) {
-            System.out.println(String.format("Введите комманду для вывода животных из таблицы, а возврата в предыдущее меню введите - BACK: %s", String.join("/", arrayList)));
+            System.out.println(String.format("Введите комманду для вывода животных из таблицы: %s" + " или введите 'BACK' для выхода в предыдущее меню", String.join("/", arrayList)));
 
             String userCommand = scanner.next().trim();
             String userCommandUpperCase = userCommand.toUpperCase();

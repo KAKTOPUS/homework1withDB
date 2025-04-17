@@ -2,7 +2,6 @@ package tools;
 import animals.Animal;
 import data.AnimalTypeData;
 import factory.AnimalFactory;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -36,57 +35,25 @@ public class AddAnimal {
 
 
         System.out.println("Введите имя: ");
-        String name = scanner.next().trim();
-        while (!aName.isAcceptableName(name)) {
-            System.out.println(String.format("%s - недопустимое имя, попробуйте снова", name));
-            name = scanner.next().trim();
-        }
+        String name = "";
+        name = aName.checkName(name, scanner);
+
 
 
         System.out.println("Введите возраст: ");
-        String ageStr = scanner.next().trim();
-        while (!ageStr.matches("\\d{1,2}$")) {
-            System.out.println(String.format("%s недопустимое число, либо же %s не является числом, попробуйте снова", ageStr, ageStr));
-            ageStr = scanner.next().trim();
-        }
+        String ageStr = "";
+        ageStr = aNum.checkNum(ageStr, scanner);
         int age = Integer.parseInt(ageStr);
-        while (!aNum.isAcceptableNumbers(age)) {
-            System.out.println(String.format("%s недопустимое число, либо же %s не является числом, попробуйте снова", age, age));
-            ageStr = scanner.next().trim();
-            age = Integer.parseInt(ageStr);
-        }
-        while (age==0||age>=100) {
-            System.out.println(String.format("%s недопустимое число, либо же %s не является числом, попробуйте снова", age, age));
-            ageStr = scanner.next().trim();
-            age = Integer.parseInt(ageStr);
-        }
 
 
         System.out.println("Введите вес: ");
-        String weightString = scanner.next().trim();
-        while (!weightString.matches("\\d{1,2}$")) {
-            System.out.println(String.format("%s недопустимое число, либо же %s не является числом, попробуйте снова", weightString, weightString));
-            weightString = scanner.next().trim();
-        }
+        String weightString = "";
+        weightString = aNum.checkNum(weightString, scanner);
         int weight = Integer.parseInt(weightString);
-        while (!aNum.isAcceptableNumbers(weight)) {
-            System.out.println(String.format("%s недопустимое число, либо же %s не является числом, попробуйте снова", weight, weight));
-            weightString = scanner.next().trim();
-            weight = Integer.parseInt(weightString);
-        }
-        while (weight==0||weight>=100) {
-            System.out.println(String.format("%s недопустимое число, либо же %s не является числом, попробуйте снова", weight, weight));
-            weightString = scanner.next().trim();
-            weight = Integer.parseInt(weightString);
-        }
-
 
         System.out.println("Введите цвет: ");
-        String color = scanner.next().trim();
-        while (!aName.isAcceptableName(color)) {
-            System.out.println(String.format("%s недопустимый цвет, попробуйте снова", color));
-            color = scanner.next().trim();
-        }
+        String color = "";
+        color = aName.checkName(color, scanner);
 
 
         Animal animal = AnimalFactory.create(name, age, weight, color, animalTypeData);
@@ -106,15 +73,6 @@ public class AddAnimal {
         animalTable.addAnimalToTable(animal.getName(), animal.getAge(), animal.getWeight(), animal.getColor(), animal.getType());
 
         System.out.println("животное добавлено в таблицу");
-    }
-
-    public static void listAnimal() {
-        if (animals.isEmpty()) {
-            System.out.println("Вы ещё ничего не добавили, список пуст!");
-        }
-        for (Animal animal : animals) {
-            System.out.println(animal);
-        }
     }
 
 }
