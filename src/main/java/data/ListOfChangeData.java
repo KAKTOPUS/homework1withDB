@@ -1,5 +1,5 @@
 package data;
 
-public enum ListOfChange {
+public enum ListOfChangeData {
     NAME, AGE, WEIGHT, COLOR, TYPE, ALL, BACK
 }

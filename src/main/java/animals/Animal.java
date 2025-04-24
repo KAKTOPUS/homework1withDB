@@ -11,7 +11,6 @@ public abstract class Animal {
     private int id = 0;
 
     protected Animal(String name, int age, int weight, String color, AnimalTypeData data) {
-        this.id = id;
         this.name = name;
         this.age = age;
         this.weight = weight;

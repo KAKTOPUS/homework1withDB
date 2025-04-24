@@ -1,7 +1,7 @@
 package tables;
 import animals.Animal;
 import data.AnimalTypeData;
-import data.ListOfChange;
+import data.ListOfChangeData;
 import db.IDataBase;
 import db.MySqlConnectorDb;
 import java.io.IOException;
@@ -150,7 +150,7 @@ public class AnimalTable extends AbsTable {
 
         while (true) {
             ArrayList<String> listOfChange = new ArrayList<>();
-            for (ListOfChange list : ListOfChange.values()) {
+            for (ListOfChangeData list : ListOfChangeData.values()) {
                 listOfChange.add(list.name());
             }
 
@@ -161,7 +161,7 @@ public class AnimalTable extends AbsTable {
 
             boolean isCommandExist = false;
 
-            for(ListOfChange list : ListOfChange.values()) {
+            for(ListOfChangeData list : ListOfChangeData.values()) {
                 if(userCommandUpperCase.equals(list.name())) {
                     isCommandExist = true;
                     break;
@@ -173,7 +173,7 @@ public class AnimalTable extends AbsTable {
                 continue;
             }
 
-            switch (ListOfChange.valueOf(userCommandUpperCase)) {
+            switch (ListOfChangeData.valueOf(userCommandUpperCase)) {
 
                 case NAME: {
                     System.out.println("Введите новое имя: ");

@@ -1,5 +1,5 @@
 package data;
 
-public enum GetterList {
+public enum GetterListData {
     ALL, TYPE, BACK
 }

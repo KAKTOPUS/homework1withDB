@@ -1,7 +1,7 @@
 package tools;
 import animals.Animal;
 import data.AnimalTypeData;
-import data.GetterList;
+import data.GetterListData;
 import tables.AnimalTable;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -15,8 +15,8 @@ public class ListAnimalFromTable {
 
     public void list() throws SQLException, IOException {
         ArrayList<String> arrayList = new ArrayList<>();
-        for (GetterList getterList : GetterList.values()) {
-            arrayList.add(getterList.name());
+        for (GetterListData getterListData : GetterListData.values()) {
+            arrayList.add(getterListData.name());
         }
 
         while (true) {
@@ -27,8 +27,8 @@ public class ListAnimalFromTable {
 
             boolean isCommandExist = false;
 
-            for (GetterList getterList : GetterList.values()) {
-                if (userCommandUpperCase.equals(getterList.name())) {
+            for (GetterListData getterListData : GetterListData.values()) {
+                if (userCommandUpperCase.equals(getterListData.name())) {
                     isCommandExist = true;
                     break;
                 }
@@ -39,7 +39,7 @@ public class ListAnimalFromTable {
                 continue;
             }
 
-            switch (GetterList.valueOf(userCommandUpperCase)) {
+            switch (GetterListData.valueOf(userCommandUpperCase)) {
                 case ALL: {
                     List<Animal> animals = animalTable.getAllAnimalsFromTable();
                     if(animals.isEmpty()) {
